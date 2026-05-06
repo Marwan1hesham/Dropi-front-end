@@ -1,0 +1,253 @@
+:root {
+  --main-color: #1f1f1f;
+  --second-color: #fefefe;
+  --hover-nav-color: #c2c1c1;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+/* Start Navbar */
+
+.navbar{
+  background-color: var(--main-color);
+}
+
+.navbar_logo{
+  width: 90px !important;
+  height: 90px !important;
+}
+
+.navbar-toggler{
+  border: 1px solid rgba(163, 163, 163, 0.7);
+  cursor: pointer;
+}
+
+.navbar-toggler:focus{
+  border-color: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-toggler-icon{
+  color: var(--second-color)
+}
+
+.navbar-toggler[aria-expanded="true"] {
+  opacity: 1;
+}
+
+.navbar-nav .nav-link {
+  color: var(--second-color);
+  transition: 0.3s ease-in-out;
+  padding: 0 100px;
+}
+
+.navbar-nav .nav-link:hover{
+  color: var(--hover-nav-color) !important;
+}
+
+.search-icon{
+  border-left: 1px solid var(--second-color);
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+
+.nav-icon{
+  cursor: pointer;
+}
+
+.nav-icon svg:hover{
+  color: var(--hover-nav-color) !important;
+  transition: 0.3s ease-in-out;
+}
+
+@media (max-width: 992px){
+  .navbar-nav .nav-link{
+    padding: 0 10px !important;
+  }
+
+  .navbar-nav .nav-item{
+    border-top: 1px solid #c2c1c1;
+    max-width: 35%;
+  }
+
+
+  .search-icon{
+    border-left: none;
+    padding-left: 5px;
+
+  }
+
+  .pt-sm-6 {
+    padding-top: 0.5rem !important;
+  }
+}
+
+.nav-icons-div{
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+/* END: Navbar */
+/* Start Hero */
+.hero{
+  background-color: var(--main-color);
+  color: var(--second-color);
+  width: 100%;
+  border-bottom: 1px solid white;
+}
+
+.hero_image{
+  width: 750px;
+}
+
+.hero_shop_btn{
+  border: 1px solid var(--second-color);
+  bottom: 5rem;
+  color: var(--second-color);
+  position: relative;
+  padding: .5rem 4rem;
+}
+
+.hero-heading{
+  position: relative;
+  bottom: 9rem;
+}
+
+.hero_shop_btn:hover{
+  color: var(--main-color);
+  background-color: var(--second-color);
+  transition: 0.3s ease-in-out;
+}
+
+@media (max-width: 768px){
+  .hero-heading{
+    position: relative;
+    bottom: 5rem;
+  }
+}
+/* END: Hero */
+/* Start Features */
+
+.featured-products{
+  background-color: var(--main-color);
+}
+
+.featured-products-content .card {
+  background-color: var(--main-color);
+  border: none;
+}
+
+.card .card-title {
+  text-decoration: none;
+}
+
+.card:hover .card-title {
+  text-decoration: underline;
+}
+
+.card .card-prices:hover{
+  cursor: pointer;
+}
+
+.card-prices .sale-price{
+  text-decoration: line-through;
+}
+
+.card-btn{
+  background-color: var(--main-color);
+  border: 1px solid var(--second-color);
+}
+
+.card-btn:hover{
+  color:#afafaf !important;
+  transition: 0.3s ease-in-out;
+}
+
+/* End Features */
+/* Start Contact */
+.contact-section{
+  border-top: 1px solid var(--second-color);
+  background-color: var(--main-color);
+}
+
+.whatsapp-number{
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+}
+
+.whatsapp-number:hover{
+  color: var(--hover-nav-color) !important;
+  transition: 0.3s ease-in-out;
+}
+
+.instagram-link{
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+}
+
+.instagram-link:hover{
+  color: var(--hover-nav-color) !important;
+  transition: 0.3s ease-in-out;
+}
+/* End Contact */
+/* Start Shop */
+.shop-section{
+  background-color: var(--main-color);
+}
+
+.categories {
+  white-space: nowrap;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+.category {
+  max-width: 400px;
+  flex: 0 0 auto;
+  padding: 10px 15px;
+  background: #222;
+  color: var(--second-color);
+  border-radius: 20px;
+  cursor: pointer;
+  scroll-behavior: smooth;
+  scroll-snap-align: start;
+  border: 1px solid transparent; 
+  transition: border 0.3s ease; 
+}
+
+.category:hover{
+  border: 1px solid var(--second-color);
+}
+
+.category-image{
+  border-radius: 15px;
+}
+
+.arrow {
+  transition: opacity 0.3s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  padding: 12px 14px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%;
+}
+
+.arrow.left {
+  left: -15px;
+}
+
+.arrow.right {
+  right: -15px;
+}
+/* End Shop */
+
