@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/all.min.css" />
-    <link rel="stylesheet" href="css/dropi.css" />
+    <title>Refund Policy | Dropi</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/dropi.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,14 +14,90 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="bg-dark text-light">
     <div id="navbar"></div>
 
+    <div class="refund-page py-5 fade-in-up">
+      <div class="container">
+        <div
+          class="refund-header p-5 rounded-4 bg-dark border border-white-10 mb-5"
+        >
+          <span class="badge bg-white text-dark mb-3">Refund Policy</span>
+          <h1 class="features-heading text-light">Easy refunds, no stress.</h1>
+          <p class="text-white-50 mt-3">
+            We want your Dropi experience to feel confident and fair. If a
+            product doesn’t match your expectations, our refund process is
+            designed to be simple and fast.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div
+              class="refund-card p-4 rounded-4 bg-white bg-opacity-10 border border-white-10"
+            >
+              <h2 class="h4 text-light mb-3">How refunds work</h2>
+              <p class="text-white-75">
+                Refund requests are accepted within 14 days of delivery. Items
+                must be returned in their original condition with all packaging
+                intact.
+              </p>
+              <ul class="text-white-75 ps-4">
+                <li>Submit your refund request using our support email.</li>
+                <li>Return the item in original packaging within 14 days.</li>
+                <li>
+                  Once received, we process refunds within 5-7 business days.
+                </li>
+              </ul>
+              <p class="text-white-75 mt-4">
+                If your item is damaged, incorrect, or not as described, we’ll
+                help you with a full refund or replacement.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div
+              class="refund-summary p-4 rounded-4 bg-white bg-opacity-10 border border-white-10"
+            >
+              <h3 class="h5 text-light mb-3">Need help?</h3>
+              <p class="text-white-75 mb-4">
+                Reach out to our support team for fast assistance and return
+                instructions.
+              </p>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-white-75">Response time</span>
+                <strong>24-48 hrs</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-white-75">Refund window</span>
+                <strong>14 days</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-white-75">Payment method</span>
+                <strong>Original source</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/all.min.js"></script>
+    <script src="../js/dropi.js"></script>
     <script>
-      fetch("components/navbar.html")
+      fetch("../components/navbar.html")
         .then((res) => res.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
+        })
+        .finally(() => {
+          if (typeof initializeCart === "function") {
+            initializeCart();
+          }
+          if (typeof initializeSearchOverlay === "function") {
+            initializeSearchOverlay();
+          }
         });
     </script>
   </body>

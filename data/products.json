@@ -1,0 +1,44 @@
+[
+  {
+    "id": "dropi-tee-01",
+    "name": "Oversized T-Shirt",
+    "category": "T-Shirts",
+    "description": "A relaxed fit oversized t-shirt with soft cotton fabric. Perfect for streetwear styling and everyday comfort.",
+    "price": 1000,
+    "salePrice": 600,
+    "image": "../images/327+ Free T-Shirt Mockups.jfif",
+    "status": "Sale",
+    "details": "Available in black and white. Classic crew neck, printed logo detail, and relaxed cut for layering."
+  },
+  {
+    "id": "dropi-jacket-01",
+    "name": "Leather Bomber Jacket",
+    "category": "Jackets",
+    "description": "A premium leather-style bomber jacket with zip pockets and elastic hem. Built for cold-weather style.",
+    "price": 2800,
+    "salePrice": 2200,
+    "image": "../images/327+ Free T-Shirt Mockups.jfif",
+    "status": "Sale",
+    "details": "Structured silhouette with warm lining, classic collar, and branded zipper pulls."
+  },
+  {
+    "id": "dropi-hoodie-01",
+    "name": "Signature Hoodie",
+    "category": "Hoodies",
+    "description": "A bold black hoodie with Dropi branding. Soft fleece interior and relaxed fit for everyday wear.",
+    "price": 1500,
+    "image": "../images/327+ Free T-Shirt Mockups.jfif",
+    "status": "New",
+    "details": "Features front pouch pocket, drawstring hood, and ribbed cuffs."
+  },
+  {
+    "id": "dropi-pants-01",
+    "name": "Dropi Sweatpants",
+    "category": "Pants",
+    "description": "Comfortable sweatpants with tapered legs and elastic cuffs. Ideal for lounging or streetwear looks.",
+    "price": 1200,
+    "image": "../images/327+ Free T-Shirt Mockups.jfif",
+    "status": "New",
+    "details": "Adjustable drawstring waist and side pockets for a casual fit."
+  }
+]

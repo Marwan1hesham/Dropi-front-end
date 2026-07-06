@@ -1,1 +1,48 @@
- 
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details | Dropi</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/dropi.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-dark text-light">
+    <div id="navbar"></div>
+
+    <div class="product-details-page py-5 fade-in-up">
+      <div class="container">
+        <div id="productDetail" class="row align-items-center"></div>
+        <div id="productActionMessage" class="mt-4"></div>
+      </div>
+    </div>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/all.min.js"></script>
+    <script src="../js/products.js"></script>
+    <script src="../js/dropi.js"></script>
+    <script src="../js/product.js"></script>
+    <script>
+      fetch("../components/navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+        })
+        .finally(() => {
+          if (typeof initializeCart === "function") {
+            initializeCart();
+          }
+          if (typeof initializeSearchOverlay === "function") {
+            initializeSearchOverlay();
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -53,16 +53,47 @@
           ><i class="fa-solid fa-magnifying-glass fs-5 text-light"></i
         ></a>
         <div id="searchOverlay" class="search-overlay d-none">
-          <input
-            type="text"
-            class="form-control w-50 search-input"
-            placeholder="Search..."
-          />
+          <div class="search-panel p-4 rounded-4">
+            <input
+              id="searchInput"
+              type="text"
+              class="form-control search-input"
+              placeholder="Search products..."
+              aria-label="Search products"
+            />
+            <div id="searchResults" class="search-results mt-3"></div>
+          </div>
         </div>
-        <a class="pe-lg-3 pe-1 cart-icon nav-icon"
-          ><i class="fa-solid fa-cart-shopping fs-5 text-light"></i
-        ></a>
+        <a id="cartIcon" class="pe-lg-3 pe-1 cart-icon nav-icon" href="#">
+          <i class="fa-solid fa-cart-shopping fs-5 text-light"></i>
+          <span id="cartCount" class="cart-count badge bg-danger text-white"
+            >0</span
+          >
+        </a>
       </div>
     </div>
   </div>
 </nav>
+<div id="cartOverlay" class="cart-overlay d-none">
+  <div class="cart-panel rounded-4 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="mb-0">Your Cart</h3>
+      <button
+        id="closeCartBtn"
+        type="button"
+        class="btn-close btn-close-white"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary mt-4">
+      <div class="d-flex justify-content-between mb-3">
+        <span>Total</span>
+        <strong id="cartTotal">0 EGP</strong>
+      </div>
+      <button id="checkoutBtn" class="btn btn-light text-dark w-100">
+        Checkout
+      </button>
+    </div>
+  </div>
+</div>
