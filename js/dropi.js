@@ -45,3 +45,25 @@ container.addEventListener("scroll", updateArrows);
 window.addEventListener("resize", updateArrows);
 
 updateArrows();
+
+const searchIcon = document.getElementById("searchIcon");
+const searchBar = document.getElementById("searchOverlay");
+const searchInput = document.querySelector("#searchOverlay input");
+
+searchIcon.addEventListener("click", () => {
+  searchBar.classList.remove("d-none");
+
+  setTimeout(() => {
+    searchInput.classList.add("show");
+  }, 10);
+});
+
+searchBar.addEventListener("click", function () {
+  searchInput.classList.remove("show");
+
+  searchBar.classList.add("d-none");
+});
+
+searchInput.addEventListener("click", function (e) {
+  e.stopPropagation();
+});

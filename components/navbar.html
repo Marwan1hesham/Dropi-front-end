@@ -1,10 +1,9 @@
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container">
     <a class="navbar-brand" href="index.html"
       ><img
         class="navbar_logo img-fluid"
-        src="images/remove-bg-2026-04-22T18-33-45.png"
+        src="../images/remove-bg-2026-04-22T18-33-45.png"
         alt=""
     /></a>
 
@@ -34,7 +33,7 @@
             class="nav-link text-light"
             aria-current="page"
             href="index.html#shop"
-            >Shop</a 
+            >Shop</a
           >
         </li>
         <li class="nav-item pe-3 pt-sm-6">
@@ -50,9 +49,16 @@
         </li>
       </ul>
       <div class="d-flex nav-icons-div">
-        <a class="pe-lg-3 pe-1 search-icon nav-icon"
+        <a id="searchIcon" class="pe-lg-3 pe-1 search-icon nav-icon"
           ><i class="fa-solid fa-magnifying-glass fs-5 text-light"></i
         ></a>
+        <div id="searchOverlay" class="search-overlay d-none">
+          <input
+            type="text"
+            class="form-control w-50 search-input"
+            placeholder="Search..."
+          />
+        </div>
         <a class="pe-lg-3 pe-1 cart-icon nav-icon"
           ><i class="fa-solid fa-cart-shopping fs-5 text-light"></i
         ></a>
