@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thank You | Dropi</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/dropi.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="text-light">
+    <div id="navbar"></div>
+
+    <main class="py-5 fade-in-up">
+      <div class="container">
+        <section
+          class="order-summary-card p-4 p-md-5 rounded-4 text-center mx-auto"
+          style="max-width: 720px"
+        >
+          <div class="mb-4" aria-hidden="true">
+            <i
+              class="fa-solid fa-circle-check text-success"
+              style="font-size: 4rem"
+            ></i>
+          </div>
+          <h1 class="mb-3">Thank you for your order!</h1>
+          <p class="text-white-50 mb-4">
+            Your order has been placed successfully. Please check your email for
+            your order information and updates.
+          </p>
+          <a href="index.html" class="btn btn-light text-dark px-4"
+            >Continue Shopping</a
+          >
+        </section>
+      </div>
+    </main>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/all.min.js"></script>
+    <script src="../js/dropi.js"></script>
+    <script>
+      fetch("../components/navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+        })
+        .finally(() => {
+          if (typeof initializeCart === "function") {
+            initializeCart();
+          }
+          if (typeof initializeSearchOverlay === "function") {
+            initializeSearchOverlay();
+          }
+        });
+    </script>
+  </body>
+</html>

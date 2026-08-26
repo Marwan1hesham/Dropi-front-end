@@ -36,12 +36,31 @@
         >
       </div>
     </div>
-    <!-- Features Products -->
+    <!-- Featured Products -->
+    <div class="featured-products fade-in-up">
+      <div class="container text-center">
+        <h1 class="features-heading text-light pt-5">Featured Products</h1>
+        <div
+          id="featuredProducts"
+          class="featured-products-content row pt-5"
+        ></div>
+      </div>
+    </div>
+
+    <!-- New Arrivals -->
     <div class="featured-products fade-in-up">
       <div class="container text-center">
         <h1 class="features-heading text-light pt-5">New Arrivals</h1>
+        <div id="newArrivals" class="featured-products-content row pt-5"></div>
+      </div>
+    </div>
+
+    <!-- Top Sales -->
+    <div class="featured-products sales-section fade-in-up">
+      <div class="container text-center">
+        <h1 class="features-heading text-light pt-5">Top Sales</h1>
         <div
-          id="featuredProducts"
+          id="salesProducts"
           class="featured-products-content row pt-5"
         ></div>
       </div>
@@ -58,20 +77,20 @@
           >
             <div class="category">
               <a
-                href="category.html?category=T-Shirts"
+                href="category.html?category=crewnecks"
                 class="text-decoration-none text-light"
               >
                 <img
                   class="img-fluid category-image"
                   src="../images/hoodie.jpg"
-                  alt="T-Shirts"
+                  alt="Crewnecks"
                 />
-                <h5 class="mt-3">T-Shirts</h5>
+                <h5 class="mt-3">Crewnecks</h5>
               </a>
             </div>
             <div class="category">
               <a
-                href="category.html?category=Hoodies"
+                href="category.html?category=hoodies"
                 class="text-decoration-none text-light"
               >
                 <img
@@ -84,7 +103,7 @@
             </div>
             <div class="category">
               <a
-                href="category.html?category=Pants"
+                href="category.html?category=pants"
                 class="text-decoration-none text-light"
               >
                 <img
@@ -97,20 +116,7 @@
             </div>
             <div class="category">
               <a
-                href="category.html?category=Shorts"
-                class="text-decoration-none text-light"
-              >
-                <img
-                  class="img-fluid category-image"
-                  src="../images/hoodie.jpg"
-                  alt="Shorts"
-                />
-                <h5 class="mt-3">Shorts</h5>
-              </a>
-            </div>
-            <div class="category">
-              <a
-                href="category.html?category=Jackets"
+                href="category.html?category=jackets"
                 class="text-decoration-none text-light"
               >
                 <img
@@ -129,29 +135,83 @@
     <!-- Contact Section -->
     <div id="contact" class="contact-section pb-5 fade-in-up">
       <div class="container">
-        <h1 class="features-heading text-light pt-5">Contact Us</h1>
-        <div class="contact-content pt-3 mt-4">
-          <div class="whatsapp">
-            <i class="fa-brands fa-whatsapp whatsapp-icon text-light fs-3"></i>
+        <div class="contact-heading pt-5">
+          <p class="contact-eyebrow text-uppercase mb-2">
+            Dropi / Stay connected
+          </p>
+          <h1 class="features-heading text-light mb-2">Contact Us</h1>
+          <p class="contact-intro text-white-50 mb-0">
+            Need help choosing a piece or checking availability? We are here to
+            help.
+          </p>
+        </div>
+        <div class="contact-content row g-3 pt-4 mt-2">
+          <div class="col-md-4">
             <a
-              href="#"
+              href="https://wa.me/201500850843"
               target="_blank"
-              class="whatsapp-number text-light fs-5 ps-2"
-              >+01124084500</a
+              rel="noopener"
+              class="contact-card h-100 text-decoration-none text-light"
+              aria-label="Contact Dropi on WhatsApp"
             >
+              <i
+                class="fa-brands fa-whatsapp whatsapp-icon text-light fs-3"
+              ></i>
+              <span class="contact-label">WhatsApp</span>
+              <span class="whatsapp-number text-light">+2015008508430</span>
+            </a>
           </div>
-          <div class="instagram mt-3">
-            <i class="fa-brands fa-instagram instagram text-light fs-3"></i>
+          <div class="col-md-4">
             <a
               href="https://www.instagram.com/dropi.eg/"
               target="_blank"
-              class="instagram-link text-light fs-5 ps-2"
-              >Dropi.eg</a
+              rel="noopener"
+              class="contact-card h-100 text-decoration-none text-light"
+              aria-label="Visit Dropi on Instagram"
             >
+              <i class="fa-brands fa-instagram instagram text-light fs-3"></i>
+              <span class="contact-label">Instagram</span>
+              <span class="instagram-link text-light fs-5 ps-2">Dropi.eg</span>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a
+              href="https://maps.app.goo.gl/mrn96DWjduc3Ktym6"
+              target="_blank"
+              rel="noopener"
+              class="contact-card h-100 text-decoration-none text-light"
+              aria-label="Open Dropi location in Google Maps"
+            >
+              <i class="fa-solid fa-location-dot text-light fs-4"></i>
+              <span class="contact-label">Visit us</span>
+              <p class="store_address text-white-50 mb-0">
+                Damanhour, behind the club, under Mrmr Mahfouz Atelier
+              </p>
+            </a>
           </div>
         </div>
+        <div class="contact-note mt-4 p-3">
+          <span class="text-light">Shopping help</span>
+          <span class="text-white-50"
+            >Ask us about sizing, stock, delivery, or your order.</span
+          >
+        </div>
+        <span
+          id="contact-end"
+          class="contact-end-anchor"
+          aria-hidden="true"
+        ></span>
       </div>
     </div>
+    <footer class="site-footer py-4">
+      <div class="container text-center">
+        <p class="mb-1 text-white-50">© 2026 Dropi. All rights reserved.</p>
+        <p class="mb-0 text-white-50">
+          Designed &amp; Developed by
+          <strong class="text-light">Marwan Hesham</strong>
+        </p>
+      </div>
+    </footer>
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script src="../js/products.js"></script>
     <script src="../js/all.min.js"></script>
@@ -168,6 +228,9 @@
           }
           if (typeof initializeSearchOverlay === "function") {
             initializeSearchOverlay();
+          }
+          if (typeof initProducts === "function") {
+            initProducts();
           }
         });
     </script>

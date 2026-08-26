@@ -24,13 +24,19 @@ function buyNowProduct(product) {
     addToCart(product);
   }
 
-  document.getElementById("productActionMessage").innerHTML =
-    '<div class="alert alert-info">Ready to checkout with this product.</div>';
+  window.location.href = "checkout.html";
 }
 
 function renderProductDetail(product) {
   const container = document.getElementById("productDetail");
   if (!container) return;
+
+  const badge =
+    Number(product.stock) === 0
+      ? { className: "bg-dark", text: "Sold Out" }
+      : Number(product.discount) > 0
+        ? { className: "bg-danger", text: "Sale" }
+        : { className: "bg-secondary", text: product.status || "" };
 
   const priceHtml = product.salePrice
     ? `<span class="fs-3 fw-bold">${product.salePrice.toLocaleString()} EGP</span>
@@ -47,9 +53,31 @@ function renderProductDetail(product) {
       <div class="product-pricing mb-4">${priceHtml}</div>
       <p id="productDescription" class="mb-4">${product.description}</p>
       <div class="product-status mb-4">
-        <span class="badge ${product.status === "Sale" ? "bg-danger" : "bg-secondary"}">
-          ${product.status}
+        <span class="badge ${badge.className}">
+          ${badge.text}
         </span>
+      </div>
+      <div class="product-options mb-4">
+        ${
+          Array.isArray(product.colors) && product.colors.length
+            ? `<div class="mb-3"><label class="form-label">Color</label><div id="colorSwatches" class="d-flex align-items-center gap-2">${product.colors
+                .map(
+                  (c) =>
+                    `<button type="button" class="color-swatch" data-color="${c}" aria-label="${c}" style="background:${c.toLowerCase()}"></button>`,
+                )
+                .join("")}</div></div>`
+            : ""
+        }
+        ${
+          Array.isArray(product.sizes) && product.sizes.length
+            ? `<div class="mb-3"><label class="form-label">Size</label><div id="sizeSwatches" class="d-flex align-items-center gap-2">${product.sizes
+                .map(
+                  (s) =>
+                    `<button type="button" class="size-swatch" data-size="${s}">${s}</button>`,
+                )
+                .join("")}</div></div>`
+            : ""
+        }
       </div>
       <div class="d-flex gap-3 product-actions">
         <button id="addToCartBtn" class="btn btn-outline-light">Add to Cart</button>
@@ -58,12 +86,38 @@ function renderProductDetail(product) {
     </div>
   `;
 
+  // interactive swatches
+  let selectedColor = null;
+  let selectedSize = null;
+
+  document.querySelectorAll(".color-swatch").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".color-swatch")
+        .forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedColor = btn.dataset.color || null;
+    });
+  });
+
+  document.querySelectorAll(".size-swatch").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".size-swatch")
+        .forEach((b) => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedSize = btn.dataset.size || null;
+    });
+  });
+
   document.getElementById("addToCartBtn").addEventListener("click", () => {
-    addProductToCart(product);
+    const item = Object.assign({}, product, { selectedColor, selectedSize });
+    addProductToCart(item);
   });
 
   document.getElementById("buyNowBtn").addEventListener("click", () => {
-    buyNowProduct(product);
+    const item = Object.assign({}, product, { selectedColor, selectedSize });
+    buyNowProduct(item);
   });
 }
 

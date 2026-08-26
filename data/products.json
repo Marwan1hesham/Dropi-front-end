@@ -8,7 +8,11 @@
     "salePrice": 600,
     "image": "../images/327+ Free T-Shirt Mockups.jfif",
     "status": "Sale",
-    "details": "Available in black and white. Classic crew neck, printed logo detail, and relaxed cut for layering."
+    "details": "Available in black and white. Classic crew neck, printed logo detail, and relaxed cut for layering.",
+    "colors": ["Black", "White", "Olive"],
+    "sizes": ["S", "M", "L", "XL"],
+    "createdAt": "2026-08-10T09:00:00Z",
+    "isFeatured": true
   },
   {
     "id": "dropi-jacket-01",
@@ -19,7 +23,11 @@
     "salePrice": 2200,
     "image": "../images/327+ Free T-Shirt Mockups.jfif",
     "status": "Sale",
-    "details": "Structured silhouette with warm lining, classic collar, and branded zipper pulls."
+    "details": "Structured silhouette with warm lining, classic collar, and branded zipper pulls.",
+    "colors": ["Black", "Brown"],
+    "sizes": ["M", "L", "XL"],
+    "createdAt": "2026-07-20T10:00:00Z",
+    "isFeatured": true
   },
   {
     "id": "dropi-hoodie-01",
@@ -29,7 +37,11 @@
     "price": 1500,
     "image": "../images/327+ Free T-Shirt Mockups.jfif",
     "status": "New",
-    "details": "Features front pouch pocket, drawstring hood, and ribbed cuffs."
+    "details": "Features front pouch pocket, drawstring hood, and ribbed cuffs.",
+    "colors": ["Black"],
+    "sizes": ["S", "M", "L", "XL"],
+    "createdAt": "2026-08-12T08:30:00Z",
+    "isFeatured": true
   },
   {
     "id": "dropi-pants-01",
@@ -39,6 +51,10 @@
     "price": 1200,
     "image": "../images/327+ Free T-Shirt Mockups.jfif",
     "status": "New",
-    "details": "Adjustable drawstring waist and side pockets for a casual fit."
+    "details": "Adjustable drawstring waist and side pockets for a casual fit.",
+    "colors": ["Gray", "Black"],
+    "sizes": ["S", "M", "L"],
+    "createdAt": "2026-08-05T11:15:00Z",
+    "isFeatured": true
   }
 ]

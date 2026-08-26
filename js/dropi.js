@@ -2,6 +2,7 @@ const container = document.getElementById("catContainer");
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const featuredContainer = document.getElementById("featuredProducts");
+const newArrivalsContainer = document.getElementById("newArrivals");
 
 const card = document.querySelector(".category");
 const scrollStep = card ? card.offsetWidth + 16 : 200;
@@ -84,8 +85,13 @@ function renderSearchResults(items, searchResults) {
     .map(
       (product) => `
         <a href="product.html?id=${product.id}" class="search-result-item">
-          <h6>${product.name}</h6>
-          <small>${product.category} · ${formatPrice(product.salePrice || product.price)}</small>
+          <div class="search-result-content">
+            <div>
+              <h6>${product.name}</h6>
+              <small>${product.category} · ${formatPrice(product.salePrice || product.price)}</small>
+            </div>
+            <img src="${product.image}" alt="${product.name}" class="search-result-image" />
+          </div>
         </a>
       `,
     )
@@ -162,13 +168,47 @@ function initializeSearchOverlay() {
 
 window.initializeSearchOverlay = initializeSearchOverlay;
 
+function initializeStickyNavbar() {
+  const navbar = document.querySelector(".navbar");
+  if (!navbar || navbar.dataset.stickyInitialized) return;
+
+  navbar.dataset.stickyInitialized = "true";
+  const updateNavbar = () => {
+    navbar.classList.toggle("is-scrolled", window.scrollY > 12);
+  };
+
+  window.addEventListener("scroll", updateNavbar, { passive: true });
+  updateNavbar();
+}
+
+const navbarPlaceholder = document.getElementById("navbar");
+if (navbarPlaceholder) {
+  new MutationObserver(initializeStickyNavbar).observe(navbarPlaceholder, {
+    childList: true,
+  });
+}
+
 function formatPrice(amount) {
   return `${amount.toLocaleString()} EGP`;
 }
 
+function getProductBadge(product) {
+  if (Number(product.stock) === 0) {
+    return { className: "bg-dark", text: "Sold Out" };
+  }
+
+  if (Number(product.discount) > 0) {
+    return { className: "bg-danger", text: "Sale" };
+  }
+
+  return {
+    className: "bg-dark",
+    text: product.status || "",
+  };
+}
+
 function createFeaturedCard(product) {
-  const badgeClass = product.status === "Sale" ? "bg-danger" : "bg-dark";
-  const badgeText = product.status || "";
+  const badge = getProductBadge(product);
   const hasSale = product.salePrice && product.salePrice < product.price;
   const priceHtml = hasSale
     ? `<span class="d-inline sale-price card-text text-light text-white-50">${formatPrice(product.price)}</span> <span class="d-inline main-price card-text text-light">${formatPrice(product.salePrice)}</span>`
@@ -180,7 +220,7 @@ function createFeaturedCard(product) {
         <a href="product.html?id=${product.id}">
           <img src="${product.image}" class="card-img-top" alt="${product.name}" />
         </a>
-        <span class="badge ${badgeClass} position-absolute top-0 end-0 m-2">${badgeText}</span>
+        <span class="badge ${badge.className} position-absolute top-0 end-0 m-2">${badge.text}</span>
       </div>
       <div class="card-body text-center">
         <a href="product.html?id=${product.id}" class="card-title text-light">${product.name}</a>
@@ -223,22 +263,29 @@ function renderCart() {
   if (!cartItems || !cartTotal) return;
 
   const cart = getCart();
+  const checkoutBtn = document.getElementById("checkoutBtn");
   if (cart.length === 0) {
     cartItems.innerHTML = '<p class="text-light">Your cart is empty.</p>';
     cartTotal.textContent = "0 EGP";
+    if (checkoutBtn) checkoutBtn.disabled = true;
     return;
   }
+
+  if (checkoutBtn) checkoutBtn.disabled = false;
 
   cartItems.innerHTML = cart
     .map(
       (item) => `
-        <div class="cart-item d-flex justify-content-between align-items-center mb-3">
-          <div>
+        <div class="cart-item d-flex align-items-start justify-content-between gap-3 mb-3">
+          <div class="flex-grow-1">
             <h6 class="mb-1 text-light">${item.name}</h6>
             <p class="mb-1 text-secondary">${item.quantity} × ${formatPrice(item.price)}</p>
+            ${item.color ? `<p class="mb-1 text-secondary">Color: ${item.color}</p>` : ""}
+            ${item.size ? `<p class="mb-1 text-secondary">Size: ${item.size}</p>` : ""}
             <p class="mb-0 text-light">${formatPrice(item.price * item.quantity)}</p>
+            <button data-id="${item.id}" class="btn btn-sm btn-outline-light mt-2 remove-cart-item">Remove</button>
           </div>
-          <button data-id="${item.id}" class="btn btn-sm btn-outline-light remove-cart-item">Remove</button>
+          <img src="${item.image || "../images/327+ Free T-Shirt Mockups.jfif"}" alt="${item.name}" class="cart-item-image rounded-2" />
         </div>
       `,
     )
@@ -293,23 +340,38 @@ function setupCartEvents() {
 
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", () => {
-      window.location.href = "product.html";
+      if (getCart().length === 0) return;
+      closeCart();
+      window.location.href = "checkout.html";
     });
   }
 }
 
 function addToCart(product) {
   const cart = getCart();
-  const existing = cart.find((item) => item.id === product.id);
+  const id = product.id;
+  const color = product.selectedColor || product.color || null;
+  const size = product.selectedSize || product.size || null;
+  const price = product.salePrice || product.price || product.price || 0;
+
+  const existing = cart.find(
+    (item) =>
+      item.id === id &&
+      (item.color || null) === color &&
+      (item.size || null) === size,
+  );
 
   if (existing) {
     existing.quantity += 1;
   } else {
     cart.push({
-      id: product.id,
+      id,
       name: product.name,
-      price: product.salePrice || product.price,
+      price,
+      image: product.image,
       quantity: 1,
+      color,
+      size,
     });
   }
 
@@ -330,11 +392,24 @@ window.closeCart = closeCart;
 async function initProducts() {
   if (typeof getFeaturedProducts !== "function") return;
   const featuredProducts = await getFeaturedProducts();
-  if (featuredContainer) {
-    renderFeaturedProducts(featuredProducts);
+  const container = document.getElementById("featuredProducts");
+  if (container && Array.isArray(featuredProducts)) {
+    container.innerHTML = featuredProducts.map(createFeaturedCard).join("");
+  }
+  if (typeof getNewArrivals === "function") {
+    const arrivals = await getNewArrivals();
+    const naContainer = document.getElementById("newArrivals");
+    if (naContainer && Array.isArray(arrivals)) {
+      naContainer.innerHTML = arrivals.map(createFeaturedCard).join("");
+    }
+  }
+  if (typeof getTopDiscountProducts === "function") {
+    const sales = await getTopDiscountProducts();
+    const salesContainer = document.getElementById("salesProducts");
+    if (salesContainer && Array.isArray(sales)) {
+      salesContainer.innerHTML = sales.map(createFeaturedCard).join("");
+    }
   }
 }
 
-if (typeof getFeaturedProducts === "function") {
-  initProducts();
-}
+window.initProducts = initProducts;

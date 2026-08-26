@@ -28,16 +28,52 @@
             >Home
           </a>
         </li>
-        <li class="nav-item pe-3 pt-sm-6">
+        <li class="nav-item dropdown pe-3 pt-sm-6">
           <a
-            class="nav-link text-light"
-            aria-current="page"
-            href="index.html#shop"
+            class="nav-link dropdown-toggle text-light"
+            href="#"
+            id="shopDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
             >Shop</a
           >
+          <ul
+            class="dropdown-menu dropdown-menu-dark"
+            aria-labelledby="shopDropdown"
+          >
+            <li>
+              <a class="dropdown-item" href="category.html?category=all"
+                >All Products</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="category.html?category=crewnecks"
+                >Crewnecks</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="category.html?category=hoodies"
+                >Hoodies</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="category.html?category=pants"
+                >Pants</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="category.html?category=jackets"
+                >Jackets</a
+              >
+            </li>
+          </ul>
         </li>
         <li class="nav-item pe-3 pt-sm-6">
-          <a class="nav-link text-light" href="index.html#contact">Contact</a>
+          <a class="nav-link text-light" href="index.html#contact-end"
+            >Contact</a
+          >
         </li>
         <li class="nav-item pe-3 pt-sm-6">
           <a
@@ -91,7 +127,7 @@
         <span>Total</span>
         <strong id="cartTotal">0 EGP</strong>
       </div>
-      <button id="checkoutBtn" class="btn btn-light text-dark w-100">
+      <button id="checkoutBtn" class="btn btn-light text-dark w-100" disabled>
         Checkout
       </button>
     </div>

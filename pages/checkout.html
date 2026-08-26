@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout | Dropi</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/dropi.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="text-light">
+    <div id="navbar"></div>
+
+    <div class="py-5">
+      <div class="container">
+        <div class="order-layout row g-4 align-items-stretch">
+          <div class="col-lg-7">
+            <div class="order-form-card p-4 p-md-5 rounded-4">
+              <div class="mb-4">
+                <h2 class="mb-2">Place your order</h2>
+                <p class="mb-0 text-secondary">
+                  Fill in your delivery details and choose your payment method.
+                </p>
+              </div>
+
+              <form id="checkoutForm" class="row g-3">
+                <div class="col-md-6">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter your first name"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter your last name"
+                    required
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label for="phoneNumber" class="form-label"
+                    >Phone Number</label
+                  >
+                  <input
+                    id="phoneNumber"
+                    type="tel"
+                    class="form-control"
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input
+                    id="email"
+                    type="email"
+                    class="form-control"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label for="governorate" class="form-label"
+                    >Governorate</label
+                  >
+                  <select id="governorate" class="form-select" required>
+                    <option value="" selected disabled>
+                      Select your governorate
+                    </option>
+                    <option>Alexandria</option>
+                    <option>Aswan</option>
+                    <option>Asyut</option>
+                    <option>Beheira</option>
+                    <option>Beni Suef</option>
+                    <option>Cairo</option>
+                    <option>Dakahlia</option>
+                    <option>Damietta</option>
+                    <option>Faiyum</option>
+                    <option>Gharbia</option>
+                    <option>Giza</option>
+                    <option>Ismailia</option>
+                    <option>Kafr El Sheikh</option>
+                    <option>Luxor</option>
+                    <option>Matrouh</option>
+                    <option>Minya</option>
+                    <option>Monufia</option>
+                    <option>New Valley</option>
+                    <option>North Sinai</option>
+                    <option>Port Said</option>
+                    <option>Qalyubia</option>
+                    <option>Qena</option>
+                    <option>Red Sea</option>
+                    <option>Sharqia</option>
+                    <option>South Sinai</option>
+                    <option>Suez</option>
+                    <option>Sohag</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label for="address" class="form-label">Address</label>
+                  <textarea
+                    id="address"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Enter your full delivery address"
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="col-12">
+                  <label for="comments" class="form-label">Comments</label>
+                  <textarea
+                    id="comments"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Add any delivery notes or comments"
+                  ></textarea>
+                </div>
+
+                <div class="col-12">
+                  <span class="form-label d-block mb-2">Payment Method</span>
+                  <div class="payment-options">
+                    <label class="payment-option">
+                      <input type="radio" name="paymentMethod" value="online" />
+                      <span>Instapay/Vodafone Cash</span>
+                    </label>
+                    <label class="payment-option">
+                      <input type="radio" name="paymentMethod" value="cash" />
+                      <span>Cash on delivery</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-12 d-none" id="transactionScreenshotWrap">
+                  <label for="transactionScreenshot" class="form-label">
+                    Upload transaction screenshot
+                  </label>
+                  <input
+                    id="transactionScreenshot"
+                    name="paymentScreenshot"
+                    type="file"
+                    class="form-control"
+                    accept="image/*"
+                  />
+                </div>
+
+                <div class="col-12 mt-4">
+                  <button
+                    id="placeOrderBtn"
+                    type="submit"
+                    class="btn btn-dark w-100"
+                  >
+                    Place Order
+                  </button>
+                  <div
+                    id="orderMessage"
+                    class="mt-3"
+                    role="status"
+                    aria-live="polite"
+                  ></div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <aside class="order-summary-card p-4 p-md-5 rounded-4 h-100">
+              <h4 class="mb-4">Order Summary</h4>
+              <div id="checkoutItems" class="mt-4"></div>
+              <div id="checkoutSummary" class="mt-4"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/all.min.js"></script>
+    <script src="../js/products.js"></script>
+    <script src="../js/dropi.js"></script>
+    <script>
+      function getCart() {
+        return JSON.parse(localStorage.getItem("dropiCart") || "[]");
+      }
+
+      function formatPrice(amount) {
+        return `${amount.toLocaleString()} EGP`;
+      }
+
+      function renderCheckout() {
+        const checkoutItems = document.getElementById("checkoutItems");
+        const checkoutSummary = document.getElementById("checkoutSummary");
+        const cart = getCart();
+
+        if (!checkoutItems || !checkoutSummary) return;
+
+        if (!cart.length) {
+          checkoutItems.innerHTML =
+            '<p class="text-white-50">Your cart is empty.</p>';
+          checkoutSummary.innerHTML =
+            '<p class="text-white-50">No items selected.</p>';
+          return;
+        }
+
+        checkoutItems.innerHTML = cart
+          .map(
+            (item) => `
+              <div class="d-flex align-items-center justify-content-between border-bottom border-secondary-subtle py-3">
+                <div class="d-flex align-items-center gap-3">
+                  <img src="${item.image || "../images/327+ Free T-Shirt Mockups.jfif"}" alt="${item.name}" class="rounded-2" style="width:64px;height:64px;object-fit:cover;" />
+                  <div>
+                    <h6 class="mb-1">${item.name}</h6>
+                    <p class="mb-0 text-white-50">${item.quantity} × ${formatPrice(item.price)}</p>
+                  </div>
+                </div>
+                <strong>${formatPrice(item.price * item.quantity)}</strong>
+              </div>
+            `,
+          )
+          .join("");
+
+        const total = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0,
+        );
+        checkoutSummary.innerHTML = `
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-white-50">Subtotal</span>
+            <span>${formatPrice(total)}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-white-50">Shipping</span>
+            <span>Free</span>
+          </div>
+          <hr class="border-secondary-subtle" />
+          <div class="d-flex justify-content-between fw-bold">
+            <span>Total</span>
+            <span>${formatPrice(total)}</span>
+          </div>
+        `;
+      }
+
+      function initializePaymentMethodToggle() {
+        const paymentInputs = document.querySelectorAll(
+          'input[name="paymentMethod"]',
+        );
+        const screenshotWrap = document.getElementById(
+          "transactionScreenshotWrap",
+        );
+
+        if (!paymentInputs.length || !screenshotWrap) return;
+
+        const toggleScreenshot = () => {
+          const selected = document.querySelector(
+            'input[name="paymentMethod"]:checked',
+          );
+          screenshotWrap.classList.toggle(
+            "d-none",
+            selected?.value !== "online",
+          );
+        };
+
+        paymentInputs.forEach((input) => {
+          input.addEventListener("change", toggleScreenshot);
+        });
+
+        toggleScreenshot();
+      }
+
+      function initializeCheckoutForm() {
+        const checkoutForm = document.getElementById("checkoutForm");
+        const placeOrderBtn = document.getElementById("placeOrderBtn");
+        const orderMessage = document.getElementById("orderMessage");
+
+        if (!checkoutForm || !placeOrderBtn || !orderMessage) return;
+
+        checkoutForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const cart = getCart();
+          const selectedPaymentMethod = document.querySelector(
+            'input[name="paymentMethod"]:checked',
+          );
+          const screenshotInput = document.getElementById(
+            "transactionScreenshot",
+          );
+
+          if (!cart.length) {
+            orderMessage.innerHTML =
+              '<div class="alert alert-warning">Your cart is empty.</div>';
+            return;
+          }
+
+          if (!selectedPaymentMethod) {
+            orderMessage.innerHTML =
+              '<div class="alert alert-warning">Please select a payment method.</div>';
+            return;
+          }
+
+          if (
+            selectedPaymentMethod.value === "online" &&
+            !screenshotInput?.files.length
+          ) {
+            orderMessage.innerHTML =
+              '<div class="alert alert-warning">Please upload your payment screenshot.</div>';
+            return;
+          }
+
+          const productsIds = cart.flatMap((item) =>
+            Array.from({ length: Number(item.quantity) || 1 }, () => item.id),
+          );
+          const phone = Number(document.getElementById("phoneNumber").value);
+
+          if (!Number.isFinite(phone)) {
+            orderMessage.innerHTML =
+              '<div class="alert alert-danger">Please enter a valid phone number.</div>';
+            return;
+          }
+
+          const order = new FormData();
+          order.append(
+            "firstName",
+            document.getElementById("firstName").value.trim(),
+          );
+          order.append(
+            "lastName",
+            document.getElementById("lastName").value.trim(),
+          );
+          order.append("phone", phone);
+          order.append("email", document.getElementById("email").value.trim());
+          order.append(
+            "governorate",
+            document.getElementById("governorate").value,
+          );
+          order.append(
+            "address",
+            document.getElementById("address").value.trim(),
+          );
+          order.append(
+            "comments",
+            document.getElementById("comments").value.trim(),
+          );
+          productsIds.forEach((productId) =>
+            order.append("productsIds", productId),
+          );
+          order.append("status", "pending");
+          order.append("paymentMethod", selectedPaymentMethod.value);
+
+          if (screenshotInput?.files[0]) {
+            order.append("paymentScreenshot", screenshotInput.files[0]);
+          }
+
+          placeOrderBtn.disabled = true;
+          placeOrderBtn.textContent = "Placing Order...";
+          orderMessage.innerHTML = "";
+
+          try {
+            const response = await fetch(
+              "http://localhost:3000/orders/checkout",
+              {
+                method: "POST",
+                body: order,
+              },
+            );
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+              throw new Error(result.message || "Unable to place your order.");
+            }
+
+            localStorage.removeItem("dropiCart");
+            window.location.href = "thank-you.html";
+          } catch (error) {
+            orderMessage.innerHTML = `<div class="alert alert-danger">${error.message || "Unable to place your order. Please try again."}</div>`;
+          } finally {
+            placeOrderBtn.disabled = false;
+            placeOrderBtn.textContent = "Place Order";
+          }
+        });
+      }
+
+      fetch("../components/navbar.html")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("navbar").innerHTML = data;
+        })
+        .finally(() => {
+          if (typeof initializeCart === "function") {
+            initializeCart();
+          }
+          if (typeof initializeSearchOverlay === "function") {
+            initializeSearchOverlay();
+          }
+          renderCheckout();
+          initializePaymentMethodToggle();
+          initializeCheckoutForm();
+        });
+    </script>
+  </body>
+</html>
