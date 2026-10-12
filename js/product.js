@@ -20,11 +20,43 @@ function addProductToCart(product) {
 }
 
 function buyNowProduct(product) {
-  if (typeof addToCart === "function") {
-    addToCart(product);
-  }
+  sessionStorage.setItem("dropiBuyNowItem", JSON.stringify(product));
+  window.location.href = "checkout.html?mode=buy-now";
+}
 
-  window.location.href = "checkout.html";
+function validateProductSelection(product, selectedColor, selectedSize) {
+  const missingColor = product.colors?.length > 0 && !selectedColor;
+  const missingSize = product.sizes?.length > 0 && !selectedSize;
+  if (!missingColor && !missingSize) return true;
+
+  const missingOptions = [
+    missingColor && "color",
+    missingSize && "size",
+  ].filter(Boolean);
+  document.getElementById("productActionMessage").innerHTML =
+    `<div class="alert alert-warning">Please choose a ${missingOptions.join(" and ")} before continuing.</div>`;
+  return false;
+}
+
+function getProductImageData(product, selectedColor) {
+  const colors = Array.isArray(product.colorOptions)
+    ? product.colorOptions
+    : Array.isArray(product.colors)
+      ? product.colors
+      : [];
+  const selectedOption = colors.find(
+    (option) =>
+      typeof option === "object" &&
+      String(option.color || "").toLowerCase() ===
+        String(selectedColor || "").toLowerCase(),
+  );
+  const imageData =
+    selectedOption?.mainImage ?? product.mainImage ?? product.productImage;
+  if (!imageData?.secure_url || !imageData?.public_id) return null;
+  return {
+    secure_url: imageData.secure_url,
+    public_id: imageData.public_id,
+  };
 }
 
 function renderProductDetail(product) {
@@ -60,10 +92,10 @@ function renderProductDetail(product) {
       <div class="product-options mb-4">
         ${
           Array.isArray(product.colors) && product.colors.length
-            ? `<div class="mb-3"><label class="form-label">Color</label><div id="colorSwatches" class="d-flex align-items-center gap-2">${product.colors
+            ? `<div class="mb-3"><div class="product-option-label"><label class="form-label mb-0">Color</label><span id="selectedColorName" class="selected-option-name">Choose a color</span></div><div id="colorSwatches" class="d-flex align-items-center gap-2">${product.colors
                 .map(
-                  (c) =>
-                    `<button type="button" class="color-swatch" data-color="${c}" aria-label="${c}" style="background:${c.toLowerCase()}"></button>`,
+                  (color, index) =>
+                    `<button type="button" class="color-swatch" data-color="${color}" data-color-index="${index}" aria-label="${color}" aria-pressed="false" style="background:${color.toLowerCase()}"></button>`,
                 )
                 .join("")}</div></div>`
             : ""
@@ -90,13 +122,29 @@ function renderProductDetail(product) {
   let selectedColor = null;
   let selectedSize = null;
 
+  const colorOptions = Array.isArray(product.colorOptions)
+    ? product.colorOptions
+    : [];
+  const productImage = document.getElementById("productImage");
+
   document.querySelectorAll(".color-swatch").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document
-        .querySelectorAll(".color-swatch")
-        .forEach((b) => b.classList.remove("selected"));
+      document.querySelectorAll(".color-swatch").forEach((b) => {
+        b.classList.remove("selected");
+        b.setAttribute("aria-pressed", "false");
+      });
       btn.classList.add("selected");
+      btn.setAttribute("aria-pressed", "true");
       selectedColor = btn.dataset.color || null;
+      document.getElementById("selectedColorName").textContent =
+        `Selected: ${selectedColor}`;
+
+      const colorIndex = Number(btn.dataset.colorIndex);
+      const selectedImage = colorOptions[colorIndex]?.mainImage?.secure_url;
+      if (productImage && selectedImage) {
+        productImage.src = selectedImage;
+        productImage.alt = `${product.name} - ${selectedColor}`;
+      }
     });
   });
 
@@ -111,12 +159,22 @@ function renderProductDetail(product) {
   });
 
   document.getElementById("addToCartBtn").addEventListener("click", () => {
-    const item = Object.assign({}, product, { selectedColor, selectedSize });
+    if (!validateProductSelection(product, selectedColor, selectedSize)) return;
+    const item = Object.assign({}, product, {
+      selectedColor,
+      selectedSize,
+      productImage: getProductImageData(product, selectedColor),
+    });
     addProductToCart(item);
   });
 
   document.getElementById("buyNowBtn").addEventListener("click", () => {
-    const item = Object.assign({}, product, { selectedColor, selectedSize });
+    if (!validateProductSelection(product, selectedColor, selectedSize)) return;
+    const item = Object.assign({}, product, {
+      selectedColor,
+      selectedSize,
+      productImage: getProductImageData(product, selectedColor),
+    });
     buyNowProduct(item);
   });
 }

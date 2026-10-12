@@ -25,10 +25,17 @@
               <div class="mb-4">
                 <h2 class="mb-2">Place your order</h2>
                 <p class="mb-0 text-secondary">
-                  Fill in your delivery details and choose your payment method.
+                  Fill in your delivery details and upload your payment
+                  confirmation.
                 </p>
               </div>
 
+              <div
+                id="checkoutSelectionGuard"
+                class="alert alert-warning"
+                role="alert"
+                hidden
+              ></div>
               <form id="checkoutForm" class="row g-3">
                 <div class="col-md-6">
                   <label for="firstName" class="form-label">First Name</label>
@@ -136,21 +143,13 @@
                   ></textarea>
                 </div>
 
-                <div class="col-12">
-                  <span class="form-label d-block mb-2">Payment Method</span>
-                  <div class="payment-options">
-                    <label class="payment-option">
-                      <input type="radio" name="paymentMethod" value="online" />
-                      <span>Instapay/Vodafone Cash</span>
-                    </label>
-                    <label class="payment-option">
-                      <input type="radio" name="paymentMethod" value="cash" />
-                      <span>Cash on delivery</span>
-                    </label>
-                  </div>
-                </div>
-
-                <div class="col-12 d-none" id="transactionScreenshotWrap">
+                <div class="col-12" id="transactionScreenshotWrap">
+                  <p class="mb-3">
+                    Pay a 50% deposit of the total amount or pay the full
+                    amount, then send a screenshot of the payment
+                    confirmation.<br />
+                    Instapay/Vodafone Cash : 01500850843
+                  </p>
                   <label for="transactionScreenshot" class="form-label">
                     Upload transaction screenshot
                   </label>
@@ -160,6 +159,7 @@
                     type="file"
                     class="form-control"
                     accept="image/*"
+                    required
                   />
                 </div>
 
@@ -202,6 +202,113 @@
         return JSON.parse(localStorage.getItem("dropiCart") || "[]");
       }
 
+      function getProductImageData(product, selectedColor) {
+        const colors = Array.isArray(product.colorOptions)
+          ? product.colorOptions
+          : Array.isArray(product.colors)
+            ? product.colors
+            : [];
+        const selectedOption = colors.find(
+          (option) =>
+            typeof option === "object" &&
+            String(option.color || "").toLowerCase() ===
+              String(selectedColor || "").toLowerCase(),
+        );
+        const imageData =
+          selectedOption?.mainImage ??
+          colors[0]?.mainImage ??
+          product.mainImage ??
+          product.productImage;
+        if (!imageData?.secure_url || !imageData?.public_id) return null;
+        return {
+          secure_url: imageData.secure_url,
+          public_id: imageData.public_id,
+        };
+      }
+
+      async function resolveProductImage(item, catalog) {
+        if (item.productImage?.secure_url && item.productImage?.public_id) {
+          return item.productImage;
+        }
+        const product = catalog.find(
+          (candidate) =>
+            String(candidate.id || candidate._id) === String(item.id),
+        );
+        return product ? getProductImageData(product, item.color) : null;
+      }
+
+      const isBuyNowCheckout =
+        new URLSearchParams(window.location.search).get("mode") === "buy-now";
+
+      function getCheckoutItems() {
+        if (!isBuyNowCheckout) return getCart();
+
+        let product;
+        try {
+          product = JSON.parse(
+            sessionStorage.getItem("dropiBuyNowItem") || "null",
+          );
+        } catch {
+          product = null;
+        }
+        if (!product) return [];
+
+        return [
+          {
+            id: product.id,
+            name: product.name,
+            price: product.salePrice || product.price || 0,
+            image: product.image,
+            productImage:
+              product.productImage ||
+              getProductImageData(product, product.selectedColor),
+            quantity: 1,
+            color: product.selectedColor || null,
+            size: product.selectedSize || null,
+            requiresColor: Boolean(product.colors?.length),
+            requiresSize: Boolean(product.sizes?.length),
+          },
+        ];
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(
+          /[&<>"']/g,
+          (character) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[character],
+        );
+      }
+
+      function getIncompleteItems(items) {
+        return items.filter(
+          (item) =>
+            ((item.requiresColor ?? true) && !item.color) ||
+            ((item.requiresSize ?? true) && !item.size),
+        );
+      }
+
+      function updateCheckoutSelectionGuard(items) {
+        const guard = document.getElementById("checkoutSelectionGuard");
+        const checkoutForm = document.getElementById("checkoutForm");
+        const incompleteItems = getIncompleteItems(items);
+        checkoutForm.hidden = incompleteItems.length > 0;
+        guard.hidden = incompleteItems.length === 0;
+        if (incompleteItems.length) {
+          guard.innerHTML = `Choose the required color and size before checkout:<ul class="mb-0 mt-2">${incompleteItems
+            .map(
+              (item) =>
+                `<li><a href="product.html?id=${encodeURIComponent(item.id || "")}">${escapeHtml(item.name || "Product")}</a></li>`,
+            )
+            .join("")}</ul>`;
+        }
+      }
+
       function formatPrice(amount) {
         return `${amount.toLocaleString()} EGP`;
       }
@@ -209,7 +316,8 @@
       function renderCheckout() {
         const checkoutItems = document.getElementById("checkoutItems");
         const checkoutSummary = document.getElementById("checkoutSummary");
-        const cart = getCart();
+        const cart = getCheckoutItems();
+        updateCheckoutSelectionGuard(cart);
 
         if (!checkoutItems || !checkoutSummary) return;
 
@@ -259,33 +367,6 @@
         `;
       }
 
-      function initializePaymentMethodToggle() {
-        const paymentInputs = document.querySelectorAll(
-          'input[name="paymentMethod"]',
-        );
-        const screenshotWrap = document.getElementById(
-          "transactionScreenshotWrap",
-        );
-
-        if (!paymentInputs.length || !screenshotWrap) return;
-
-        const toggleScreenshot = () => {
-          const selected = document.querySelector(
-            'input[name="paymentMethod"]:checked',
-          );
-          screenshotWrap.classList.toggle(
-            "d-none",
-            selected?.value !== "online",
-          );
-        };
-
-        paymentInputs.forEach((input) => {
-          input.addEventListener("change", toggleScreenshot);
-        });
-
-        toggleScreenshot();
-      }
-
       function initializeCheckoutForm() {
         const checkoutForm = document.getElementById("checkoutForm");
         const placeOrderBtn = document.getElementById("placeOrderBtn");
@@ -296,10 +377,7 @@
         checkoutForm.addEventListener("submit", async (event) => {
           event.preventDefault();
 
-          const cart = getCart();
-          const selectedPaymentMethod = document.querySelector(
-            'input[name="paymentMethod"]:checked',
-          );
+          const cart = getCheckoutItems();
           const screenshotInput = document.getElementById(
             "transactionScreenshot",
           );
@@ -310,24 +388,21 @@
             return;
           }
 
-          if (!selectedPaymentMethod) {
-            orderMessage.innerHTML =
-              '<div class="alert alert-warning">Please select a payment method.</div>';
-            return;
-          }
-
-          if (
-            selectedPaymentMethod.value === "online" &&
-            !screenshotInput?.files.length
-          ) {
+          if (!screenshotInput?.files.length) {
             orderMessage.innerHTML =
               '<div class="alert alert-warning">Please upload your payment screenshot.</div>';
             return;
           }
 
-          const productsIds = cart.flatMap((item) =>
-            Array.from({ length: Number(item.quantity) || 1 }, () => item.id),
+          const incompleteProduct = cart.find(
+            (item) => !item.id || !item.color || !item.size,
           );
+          if (incompleteProduct) {
+            orderMessage.innerHTML =
+              '<div class="alert alert-warning">Please choose a color and size for every product before checking out.</div>';
+            return;
+          }
+
           const phone = Number(document.getElementById("phoneNumber").value);
 
           if (!Number.isFinite(phone)) {
@@ -336,6 +411,29 @@
             return;
           }
 
+          let catalog = [];
+          if (
+            cart.some(
+              (item) =>
+                !item.productImage?.secure_url || !item.productImage?.public_id,
+            ) &&
+            typeof fetchProducts === "function"
+          ) {
+            catalog = await fetchProducts();
+          }
+          const products = await Promise.all(
+            cart.map(async (item) => {
+              const productImage = await resolveProductImage(item, catalog);
+              return {
+                productId: item.id,
+                color: item.color,
+                size: item.size,
+                quantity: Number(item.quantity) || 1,
+                price: item.price * (Number(item.quantity) || 1),
+                ...(productImage ? { productImage } : {}),
+              };
+            }),
+          );
           const order = new FormData();
           order.append(
             "firstName",
@@ -345,7 +443,7 @@
             "lastName",
             document.getElementById("lastName").value.trim(),
           );
-          order.append("phone", phone);
+          order.append("phone", String(phone));
           order.append("email", document.getElementById("email").value.trim());
           order.append(
             "governorate",
@@ -359,15 +457,8 @@
             "comments",
             document.getElementById("comments").value.trim(),
           );
-          productsIds.forEach((productId) =>
-            order.append("productsIds", productId),
-          );
-          order.append("status", "pending");
-          order.append("paymentMethod", selectedPaymentMethod.value);
-
-          if (screenshotInput?.files[0]) {
-            order.append("paymentScreenshot", screenshotInput.files[0]);
-          }
+          order.append("products", JSON.stringify(products));
+          order.append("paymentScreenshot", screenshotInput.files[0]);
 
           placeOrderBtn.disabled = true;
           placeOrderBtn.textContent = "Placing Order...";
@@ -387,7 +478,11 @@
               throw new Error(result.message || "Unable to place your order.");
             }
 
-            localStorage.removeItem("dropiCart");
+            if (isBuyNowCheckout) {
+              sessionStorage.removeItem("dropiBuyNowItem");
+            } else {
+              localStorage.removeItem("dropiCart");
+            }
             window.location.href = "thank-you.html";
           } catch (error) {
             orderMessage.innerHTML = `<div class="alert alert-danger">${error.message || "Unable to place your order. Please try again."}</div>`;
@@ -411,7 +506,6 @@
             initializeSearchOverlay();
           }
           renderCheckout();
-          initializePaymentMethodToggle();
           initializeCheckoutForm();
         });
     </script>

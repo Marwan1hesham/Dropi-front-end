@@ -425,15 +425,29 @@ button,
   }
 
   .category {
-    max-width: 72vw;
-    padding: 8px 10px;
-    border-radius: 12px;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    padding: 8px;
+    border-radius: 10px;
   }
 
   .category-image {
-    max-height: 150px;
+    width: 100%;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
   }
+
+  #catContainer.categories {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    white-space: normal;
+    scroll-snap-type: none;
+  }
+
+  #catContainer .category h5 { margin-bottom: 0; font-size: 0.95rem; }
+  #leftBtn, #rightBtn { display: none; }
 
   .arrow {
     width: 36px;
@@ -758,6 +772,19 @@ button,
   background-color: #111111;
   font-size: 0.85rem;
 }
+
+.admin-entry {
+  display: inline-block;
+  margin-top: 1.25rem;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.admin-entry:hover {
+  color: var(--second-color);
+}
 /* End Contact */
 /* Start Shop */
 .shop-section{
@@ -768,6 +795,8 @@ button,
   white-space: nowrap;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .categories::-webkit-scrollbar {
@@ -796,6 +825,32 @@ button,
 
 .category-image{
   border-radius: 15px;
+}
+
+@media (max-width: 768px) {
+  #catContainer.categories {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible !important;
+    white-space: normal;
+    scroll-snap-type: none;
+  }
+
+  #catContainer .category {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  #catContainer .category-image {
+    width: 100%;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  #catContainer .category h5 { margin-bottom: 0; font-size: 0.95rem; }
+  #leftBtn, #rightBtn { display: none; }
 }
 
 .cart-count {
@@ -948,11 +1003,17 @@ button,
   border-radius: 6px;
   border: 2px solid rgba(255, 255, 255, 0.12);
   cursor: pointer;
+  transition: transform 0.08s ease, outline 0.08s ease, box-shadow 0.08s ease;
 }
 .color-swatch.selected {
-  outline: 3px solid rgba(255, 255, 255, 0.18);
+  border-color: #fff;
+  outline: none;
+  box-shadow: none;
   transform: translateY(-2px);
 }
+.color-swatch:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.product-option-label { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.55rem; }
+.selected-option-name { color: rgba(255, 255, 255, 0.7); font-size: 0.85rem; }
 .size-swatch {
   min-width: 44px;
   height: 36px;

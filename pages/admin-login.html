@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin sign in | Dropi</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/dropi.css" />
+    <link rel="stylesheet" href="../css/admin.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="admin-body">
+    <main class="admin-login-page">
+      <a class="admin-login-back" href="index.html"
+        ><i class="fa-solid fa-arrow-left"></i> Back to store</a
+      >
+      <section class="admin-login-card">
+        <div class="admin-login-mark"><i class="fa-solid fa-lock"></i></div>
+        <p class="admin-kicker">Dropi control room</p>
+        <h1>Welcome back.</h1>
+        <p class="admin-login-copy">
+          Sign in to manage your products and orders.
+        </p>
+        <form id="adminLoginForm" class="admin-login-form">
+          <label for="adminUsername">Username</label>
+          <input
+            id="adminUsername"
+            name="username"
+            autocomplete="username"
+            required
+          />
+          <label for="adminPassword">Password</label>
+          <input
+            id="adminPassword"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          />
+          <p id="loginError" class="admin-login-error" role="alert"></p>
+          <button class="admin-button w-100" type="submit">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign in
+          </button>
+        </form>
+      </section>
+    </main>
+    <script src="../js/admin-auth.js"></script>
+    <script src="../js/admin-login.js"></script>
+  </body>
+</html>

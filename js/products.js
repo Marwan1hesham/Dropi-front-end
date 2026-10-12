@@ -1,5 +1,5 @@
-const PRODUCTS_URL = "http://192.168.1.8:3000/products";
-const CATEGORY_PRODUCTS_URL = "http://192.168.1.8:3000/products";
+const PRODUCTS_URL = "/api/products";
+const CATEGORY_PRODUCTS_URL = "/api/products?category=";
 
 function normalizeProduct(product) {
   const discount = Number(product.discount) || 0;
@@ -11,9 +11,18 @@ function normalizeProduct(product) {
   return {
     ...product,
     id: product.id || product._id,
-    image: product.image || product.mainImage?.secure_url,
-    images: product.subImages || [],
-    colors: product.colors || product.colours || [],
+    image: product.image || product.colors?.[0]?.mainImage?.secure_url || "",
+    images: product.colors?.[0]?.subImages || [],
+    colorOptions: Array.isArray(product.colors) ? product.colors : [],
+    colors: (product.colors || []).map((item) =>
+      typeof item === "string" ? item : item.color,
+    ),
+    variants: product.variants || [],
+    sizes: [...new Set((product.variants || []).map((item) => item.size))],
+    stock: (product.variants || []).reduce(
+      (total, item) => total + Number(item.stock || 0),
+      0,
+    ),
     isFeatured: product.isFeatured === true,
     status: product.status
       ? product.status.charAt(0).toUpperCase() + product.status.slice(1)
@@ -29,7 +38,7 @@ async function fetchProducts() {
       throw new Error(`Failed to load products: ${response.status}`);
     }
     const result = await response.json();
-    const products = Array.isArray(result.data) ? result.data : [];
+    const products = Array.isArray(result) ? result : result.data || [];
     return products.map(normalizeProduct);
   } catch (error) {
     console.error(error);
@@ -73,13 +82,13 @@ async function getProductsByCategory(category) {
   if (!category) return [];
   try {
     const response = await fetch(
-      `${CATEGORY_PRODUCTS_URL}/${encodeURIComponent(category.trim().toLowerCase())}`,
+      `${CATEGORY_PRODUCTS_URL}${encodeURIComponent(category.trim().toLowerCase())}`,
     );
     if (!response.ok) {
       throw new Error(`Failed to load products: ${response.status}`);
     }
     const result = await response.json();
-    const products = Array.isArray(result.data) ? result.data : [];
+    const products = Array.isArray(result) ? result : result.data || [];
     return products.map(normalizeProduct);
   } catch (error) {
     console.error(error);

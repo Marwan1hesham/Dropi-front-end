@@ -353,6 +353,8 @@ function addToCart(product) {
   const color = product.selectedColor || product.color || null;
   const size = product.selectedSize || product.size || null;
   const price = product.salePrice || product.price || product.price || 0;
+  const requiresColor = Boolean(product.colors?.length);
+  const requiresSize = Boolean(product.sizes?.length);
 
   const existing = cart.find(
     (item) =>
@@ -363,16 +365,40 @@ function addToCart(product) {
 
   if (existing) {
     existing.quantity += 1;
+    existing.productImage =
+      product.productImage || existing.productImage || null;
   } else {
-    cart.push({
-      id,
-      name: product.name,
-      price,
-      image: product.image,
-      quantity: 1,
-      color,
-      size,
-    });
+    const incomplete = cart.find(
+      (item) =>
+        item.id === id &&
+        (((item.requiresColor ?? true) && !item.color) ||
+          ((item.requiresSize ?? true) && !item.size)),
+    );
+    if (incomplete) {
+      Object.assign(incomplete, {
+        color,
+        size,
+        price,
+        image: product.image,
+        productImage: product.productImage || incomplete.productImage || null,
+        requiresColor,
+        requiresSize,
+      });
+      incomplete.quantity += 1;
+    } else {
+      cart.push({
+        id,
+        name: product.name,
+        price,
+        image: product.image,
+        productImage: product.productImage || null,
+        quantity: 1,
+        color,
+        size,
+        requiresColor,
+        requiresSize,
+      });
+    }
   }
 
   saveCart(cart);

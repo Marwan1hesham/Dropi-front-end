@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin dashboard | Dropi</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/admin.css" />
+  </head>
+  <body class="admin-body">
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <a class="admin-brand" href="admin.html"
+          ><span class="admin-brand-mark">D</span><span>Dropi admin</span></a
+        >
+        <nav class="admin-nav" aria-label="Admin navigation">
+          <a class="admin-nav-link active" href="#overview" data-view="overview"
+            ><i class="fa-solid fa-grid-2"></i><span>Overview</span></a
+          >
+          <a class="admin-nav-link" href="#products" data-view="products"
+            ><i class="fa-solid fa-box"></i><span>Products</span></a
+          >
+          <a class="admin-nav-link" href="#orders" data-view="orders"
+            ><i class="fa-solid fa-receipt"></i><span>Orders</span></a
+          >
+        </nav>
+        <div class="admin-sidebar-bottom">
+          <small>Storefront</small>
+          <a href="index.html"
+            ><i class="fa-solid fa-arrow-up-right-from-square me-2"></i>View
+            store</a
+          >
+          <a href="admin-login.html" id="logoutButton"
+            ><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sign
+            out</a
+          >
+        </div>
+      </aside>
+
+      <main class="admin-main">
+        <header class="admin-topbar">
+          <div>
+            <p class="admin-kicker">Wednesday, August 26, 2026</p>
+            <h1 id="pageTitle">Overview</h1>
+          </div>
+          <div class="admin-user">
+            <div>
+              <strong>Administrator</strong><small>Store manager</small>
+            </div>
+            <span class="admin-avatar">A</span>
+          </div>
+        </header>
+
+        <div class="admin-content">
+          <section
+            class="admin-view active"
+            id="overviewView"
+            data-view-panel="overview"
+          >
+            <div class="admin-page-heading">
+              <div>
+                <h2>Good morning, admin.</h2>
+                <p>Here is what is happening in your store today.</p>
+              </div>
+              <a class="admin-button" href="#products" data-view="products"
+                ><i class="fa-solid fa-box"></i> Manage products</a
+              >
+            </div>
+            <div class="admin-stats">
+              <div class="admin-stat">
+                <span class="admin-stat-label">Total products</span
+                ><strong id="statProducts">0</strong>
+              </div>
+              <div class="admin-stat">
+                <span class="admin-stat-label">Total orders</span
+                ><strong id="statOrders">0</strong>
+              </div>
+              <div class="admin-stat">
+                <span class="admin-stat-label">Pending orders</span
+                ><strong id="statPending">0</strong>
+              </div>
+              <div class="admin-stat">
+                <span class="admin-stat-label">Store revenue</span
+                ><strong id="statRevenue">0 EGP</strong>
+              </div>
+            </div>
+            <div class="admin-panel">
+              <div class="admin-panel-heading">
+                <h3>Recent orders</h3>
+                <a href="#orders" data-view="orders"
+                  >See all orders <i class="fa-solid fa-arrow-right ms-1"></i
+                ></a>
+              </div>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Order number</th>
+                      <th>Full name</th>
+                      <th>Items</th>
+                      <th>Payment screenshot</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentOrdersTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section
+            class="admin-view"
+            id="productsView"
+            data-view-panel="products"
+          >
+            <div class="admin-page-heading">
+              <div>
+                <h2>Products</h2>
+                <p>Add, update, and organize your catalog.</p>
+              </div>
+              <button class="admin-button" id="addProductButton">
+                <i class="fa-solid fa-plus"></i> Add product
+              </button>
+            </div>
+            <div class="admin-toolbar">
+              <input
+                class="admin-search"
+                id="productSearch"
+                type="search"
+                placeholder="Search products..."
+                aria-label="Search products"
+              /><select
+                class="admin-select"
+                id="productCategoryFilter"
+                aria-label="Filter products by category"
+              >
+                <option value="">All categories</option></select
+              ><select
+                class="admin-select"
+                id="productStatusFilter"
+                aria-label="Filter products by status"
+              >
+                <option value="">All statuses</option>
+                <option value="new">new</option>
+                <option value="sale">sale</option>
+                <option value="sold_out">sold_out</option>
+              </select>
+            </div>
+            <div class="admin-panel">
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Category</th>
+                      <th>Price</th>
+                      <th>Status</th>
+                      <th>Stock</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="productsTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="admin-view" id="ordersView" data-view-panel="orders">
+            <div class="admin-page-heading">
+              <div>
+                <h2>Orders</h2>
+                <p>
+                  Review orders and update fulfillment status whenever needed.
+                </p>
+              </div>
+            </div>
+            <div class="admin-toolbar">
+              <input
+                class="admin-search"
+                id="orderSearch"
+                type="search"
+                placeholder="Search order or customer..."
+                aria-label="Search orders"
+              /><select
+                class="admin-select"
+                id="orderStatusFilter"
+                aria-label="Filter orders by status"
+              >
+                <option value="pending">pending</option>
+                <option value="paid">paid</option>
+                <option value="cancelled">cancelled</option>
+                <option value="" selected>none</option></select
+              ><select
+                class="admin-select"
+                id="orderDateFilter"
+                aria-label="Filter orders by date"
+              >
+                <option value="">Any date</option>
+                <option value="today">Today</option>
+                <option value="week">Last 7 days</option>
+              </select>
+            </div>
+            <div class="admin-panel">
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Order number</th>
+                      <th>Full name</th>
+                      <th>Items</th>
+                      <th>Payment screenshot</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ordersTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div
+      class="admin-modal-backdrop"
+      id="orderStatusModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="orderStatusModalTitle"
+    >
+      <form class="admin-modal" id="orderStatusForm">
+        <div class="admin-modal-header">
+          <h3 id="orderStatusModalTitle">Update order status</h3>
+          <button
+            class="admin-close"
+            id="closeOrderStatusModal"
+            type="button"
+            aria-label="Close"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="admin-modal-body">
+          <input type="hidden" id="orderStatusOrderId" />
+          <div class="admin-form-field">
+            <label>Order <span id="orderStatusOrderNumber"></span></label>
+            <label for="orderStatusValue">New status</label>
+            <select id="orderStatusValue" required>
+              <option value="pending">pending</option>
+              <option value="paid">paid</option>
+              <option value="cancelled">cancelled</option>
+            </select>
+          </div>
+          <div class="admin-modal-footer">
+            <button
+              class="admin-button secondary"
+              id="cancelOrderStatusModal"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button class="admin-button" type="submit">
+              <i class="fa-solid fa-check"></i> Save status
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div
+      class="admin-modal-backdrop"
+      id="deleteProductModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="deleteConfirmationTitle"
+    >
+      <div class="admin-modal">
+        <div class="admin-modal-header">
+          <h3 id="deleteConfirmationTitle">Delete product?</h3>
+          <button
+            class="admin-close"
+            id="closeDeleteProductModal"
+            type="button"
+            aria-label="Close"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="admin-modal-body">
+          <p>
+            Are you sure you want to delete
+            <strong id="deleteConfirmationName"></strong>?
+          </p>
+          <div class="admin-modal-footer">
+            <button
+              class="admin-button secondary"
+              id="cancelDeleteProductButton"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              class="admin-button danger"
+              id="confirmDeleteProductButton"
+              type="button"
+            >
+              Yes, delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="admin-modal-backdrop"
+      id="productModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="productModalTitle"
+    >
+      <form class="admin-modal" id="productForm">
+        <div class="admin-modal-header">
+          <h3 id="productModalTitle">Add product</h3>
+          <button
+            class="admin-close"
+            id="closeProductModal"
+            type="button"
+            aria-label="Close"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="admin-modal-body">
+          <input type="hidden" id="productId" />
+          <div class="admin-form-grid">
+            <div class="admin-form-field full">
+              <label for="productName">Product name</label
+              ><input id="productName" required />
+            </div>
+            <div class="admin-form-field">
+              <label for="productCategory">Category</label
+              ><select id="productCategory" required>
+                <option value="" selected disabled>Select a category</option>
+                <option value="crewnecks">crewnecks</option>
+                <option value="hoodies">hoodies</option>
+                <option value="pants">pants</option>
+                <option value="jackets">jackets</option>
+              </select>
+            </div>
+            <div class="admin-form-field">
+              <label for="productPrice">Price (EGP)</label
+              ><input id="productPrice" type="number" min="0" required />
+            </div>
+            <div class="admin-form-field full">
+              <label for="productDescription">Description</label
+              ><textarea id="productDescription" required></textarea>
+            </div>
+            <details
+              class="admin-optional-section full"
+              id="productColorsSection"
+            >
+              <summary>Colors and images <span>Optional</span></summary>
+              <div class="admin-field-heading">
+                <small
+                  >Add a color only when the product has color options.</small
+                >
+                <button
+                  class="admin-button secondary admin-small-button"
+                  id="addColorButton"
+                  type="button"
+                >
+                  <i class="fa-solid fa-plus"></i> Add color
+                </button>
+              </div>
+              <div id="colorRows" class="admin-repeater"></div>
+            </details>
+            <details
+              class="admin-optional-section full"
+              id="productVariantsSection"
+            >
+              <summary>Sizes and stock <span>Optional</span></summary>
+              <div class="admin-field-heading">
+                <small
+                  >Add stock rows only for products with size options.</small
+                >
+                <button
+                  class="admin-button secondary admin-small-button"
+                  id="addVariantButton"
+                  type="button"
+                >
+                  <i class="fa-solid fa-plus"></i> Add size
+                </button>
+              </div>
+              <div id="variantRows" class="admin-repeater"></div>
+            </details>
+            <details
+              class="admin-optional-section full"
+              id="productMoreOptions"
+            >
+              <summary>More options <span>Optional</span></summary>
+              <div class="admin-form-grid">
+                <div class="admin-form-field">
+                  <label for="productDiscount">Discount (%)</label
+                  ><input
+                    id="productDiscount"
+                    type="number"
+                    min="0"
+                    max="100"
+                  />
+                </div>
+                <div class="admin-form-field">
+                  <label for="productStatus">Status</label>
+                  <select id="productStatus" required>
+                    <option value="new">new</option>
+                    <option value="sale">sale</option>
+                    <option value="sold_out">sold_out</option>
+                  </select>
+                </div>
+                <div class="admin-form-field full">
+                  <label class="admin-checkbox-label" for="productFeatured">
+                    <input id="productFeatured" type="checkbox" />
+                    Show in featured products
+                  </label>
+                </div>
+              </div>
+            </details>
+          </div>
+          <div class="admin-modal-footer">
+            <button
+              class="admin-button secondary"
+              id="cancelProductModal"
+              type="button"
+            >
+              Cancel</button
+            ><button class="admin-button" type="submit">
+              <i class="fa-solid fa-check"></i> Save product
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <script src="../js/admin-auth.js"></script>
+    <script src="../js/admin.js"></script>
+  </body>
+</html>

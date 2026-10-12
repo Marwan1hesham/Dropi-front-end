@@ -88,18 +88,6 @@
         <a id="searchIcon" class="pe-lg-3 pe-1 search-icon nav-icon"
           ><i class="fa-solid fa-magnifying-glass fs-5 text-light"></i
         ></a>
-        <div id="searchOverlay" class="search-overlay d-none">
-          <div class="search-panel p-4 rounded-4">
-            <input
-              id="searchInput"
-              type="text"
-              class="form-control search-input"
-              placeholder="Search products..."
-              aria-label="Search products"
-            />
-            <div id="searchResults" class="search-results mt-3"></div>
-          </div>
-        </div>
         <a id="cartIcon" class="pe-lg-3 pe-1 cart-icon nav-icon" href="#">
           <i class="fa-solid fa-cart-shopping fs-5 text-light"></i>
           <span id="cartCount" class="cart-count badge bg-danger text-white"
@@ -110,6 +98,18 @@
     </div>
   </div>
 </nav>
+<div id="searchOverlay" class="search-overlay d-none">
+  <div class="search-panel p-4 rounded-4">
+    <input
+      id="searchInput"
+      type="text"
+      class="form-control search-input"
+      placeholder="Search products..."
+      aria-label="Search products"
+    />
+    <div id="searchResults" class="search-results mt-3"></div>
+  </div>
+</div>
 <div id="cartOverlay" class="cart-overlay d-none">
   <div class="cart-panel rounded-4 p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
