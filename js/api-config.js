@@ -1,7 +1,8 @@
 (function () {
   const localHosts = ["localhost", "127.0.0.1"];
   const localApiBaseUrl = "http://localhost:3000";
-  const productionApiBaseUrl = "";
+  const productionApiBaseUrl =
+    "https://dropi-back-end-production.up.railway.app";
   const configuredApiBaseUrl =
     window.DROPI_API_BASE_URL ||
     (localHosts.includes(window.location.hostname)
