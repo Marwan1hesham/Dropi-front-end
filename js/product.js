@@ -25,7 +25,7 @@ function buyNowProduct(product) {
 }
 
 function validateProductSelection(product, selectedColor, selectedSize) {
-  const missingColor = product.colors?.length > 0 && !selectedColor;
+  const missingColor = product.colors?.length > 1 && !selectedColor;
   const missingSize = product.sizes?.length > 0 && !selectedSize;
   if (!missingColor && !missingSize) return true;
 
@@ -36,6 +36,57 @@ function validateProductSelection(product, selectedColor, selectedSize) {
   document.getElementById("productActionMessage").innerHTML =
     `<div class="alert alert-warning">Please choose a ${missingOptions.join(" and ")} before continuing.</div>`;
   return false;
+}
+
+function getAvailableProductStock(product, selectedColor, selectedSize) {
+  const variants = Array.isArray(product.variants) ? product.variants : [];
+  if (!variants.length) return Math.max(0, Number(product.stock) || 0);
+
+  return variants.reduce((total, variant) => {
+    const variantColor = String(variant.color || "").trim().toLowerCase();
+    const variantSize = String(variant.size || "").trim().toLowerCase();
+    if (
+      selectedColor &&
+      variantColor &&
+      variantColor !== selectedColor.trim().toLowerCase()
+    ) {
+      return total;
+    }
+    if (
+      selectedSize &&
+      variantSize &&
+      variantSize !== selectedSize.trim().toLowerCase()
+    ) {
+      return total;
+    }
+    return total + Math.max(0, Number(variant.stock) || 0);
+  }, 0);
+}
+
+function updateProductActions(product, selectedColor, selectedSize) {
+  const availableStock = getAvailableProductStock(
+    product,
+    selectedColor,
+    selectedSize,
+  );
+  const cartQuantity = getCart()
+    .filter(
+      (item) =>
+        item.id === product.id &&
+        (item.color || null) === selectedColor &&
+        (item.size || null) === selectedSize,
+    )
+    .reduce((total, item) => total + Math.max(0, Number(item.quantity) || 0), 0);
+  const addToCartButton = document.getElementById("addToCartBtn");
+  const buyNowButton = document.getElementById("buyNowBtn");
+  const outOfStock = availableStock < 1;
+
+  addToCartButton.disabled = outOfStock || cartQuantity >= availableStock;
+  buyNowButton.disabled = outOfStock;
+  addToCartButton.title =
+    cartQuantity >= availableStock && !outOfStock
+      ? "Your cart already has all available stock."
+      : "";
 }
 
 function getProductImageData(product, selectedColor) {
@@ -64,7 +115,7 @@ function renderProductDetail(product) {
   if (!container) return;
 
   const badge =
-    Number(product.stock) === 0
+    Number(product.stock) <= 0
       ? { className: "bg-dark", text: "Sold Out" }
       : Number(product.discount) > 0
         ? { className: "bg-danger", text: "Sale" }
@@ -91,11 +142,11 @@ function renderProductDetail(product) {
       </div>
       <div class="product-options mb-4">
         ${
-          Array.isArray(product.colors) && product.colors.length
+          Array.isArray(product.colors) && product.colors.length > 1
             ? `<div class="mb-3"><div class="product-option-label"><label class="form-label mb-0">Color</label><span id="selectedColorName" class="selected-option-name">Choose a color</span></div><div id="colorSwatches" class="d-flex align-items-center gap-2">${product.colors
                 .map(
                   (color, index) =>
-                    `<button type="button" class="color-swatch" data-color="${color}" data-color-index="${index}" aria-label="${color}" aria-pressed="false" style="background:${color.toLowerCase()}"></button>`,
+                    `<button type="button" class="color-swatch" data-color="${color}" data-color-index="${index}" aria-label="${color}" aria-pressed="false" style="background:${product.colorOptions[index]?.hexCode || color}"></button>`,
                 )
                 .join("")}</div></div>`
             : ""
@@ -119,13 +170,15 @@ function renderProductDetail(product) {
   `;
 
   // interactive swatches
-  let selectedColor = null;
+  let selectedColor =
+    product.colors?.length === 1 ? product.colors[0] : null;
   let selectedSize = null;
 
   const colorOptions = Array.isArray(product.colorOptions)
     ? product.colorOptions
     : [];
   const productImage = document.getElementById("productImage");
+  updateProductActions(product, selectedColor, selectedSize);
 
   document.querySelectorAll(".color-swatch").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -145,6 +198,7 @@ function renderProductDetail(product) {
         productImage.src = selectedImage;
         productImage.alt = `${product.name} - ${selectedColor}`;
       }
+      updateProductActions(product, selectedColor, selectedSize);
     });
   });
 
@@ -155,21 +209,51 @@ function renderProductDetail(product) {
         .forEach((b) => b.classList.remove("selected"));
       btn.classList.add("selected");
       selectedSize = btn.dataset.size || null;
+      updateProductActions(product, selectedColor, selectedSize);
     });
   });
 
   document.getElementById("addToCartBtn").addEventListener("click", () => {
     if (!validateProductSelection(product, selectedColor, selectedSize)) return;
+    const availableStock = getAvailableProductStock(
+      product,
+      selectedColor,
+      selectedSize,
+    );
+    const cartQuantity = getCart()
+      .filter(
+        (item) =>
+          item.id === product.id &&
+          (item.color || null) === selectedColor &&
+          (item.size || null) === selectedSize,
+      )
+      .reduce(
+        (total, item) => total + Math.max(0, Number(item.quantity) || 0),
+        0,
+      );
+    if (availableStock < 1 || cartQuantity >= availableStock) {
+      document.getElementById("productActionMessage").innerHTML =
+        '<div class="alert alert-warning">There is not enough stock available for this selection.</div>';
+      updateProductActions(product, selectedColor, selectedSize);
+      return;
+    }
     const item = Object.assign({}, product, {
       selectedColor,
       selectedSize,
       productImage: getProductImageData(product, selectedColor),
     });
     addProductToCart(item);
+    updateProductActions(product, selectedColor, selectedSize);
   });
 
   document.getElementById("buyNowBtn").addEventListener("click", () => {
     if (!validateProductSelection(product, selectedColor, selectedSize)) return;
+    if (getAvailableProductStock(product, selectedColor, selectedSize) < 1) {
+      document.getElementById("productActionMessage").innerHTML =
+        '<div class="alert alert-warning">There is not enough stock available for this selection.</div>';
+      updateProductActions(product, selectedColor, selectedSize);
+      return;
+    }
     const item = Object.assign({}, product, {
       selectedColor,
       selectedSize,

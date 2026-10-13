@@ -424,12 +424,16 @@ function addColorRow(color = {}) {
   row.className = "admin-repeater-row color-row";
   row.dataset.existingColor = JSON.stringify(color);
   const hasExistingMainImage = Boolean(color.mainImage?.secure_url);
+  const hexCode = /^#[0-9a-f]{6}$/i.test(color.hexCode || "")
+    ? color.hexCode
+    : "";
   row.innerHTML = `
     <div class="admin-color-row-heading">
       <strong>Color option</strong>
       <button class="admin-repeater-remove" type="button" title="Remove color" aria-label="Remove color"><i class="fa-solid fa-trash"></i></button>
     </div>
     <label class="admin-file-field">Color name<input data-color type="text" placeholder="For example Black" aria-label="Color name" value="${escapeHtml(color.color || "")}" required></label>
+    <label class="admin-file-field">Color hex<input data-color-hex type="text" placeholder="#000000" aria-label="Color hex code" value="${hexCode}" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7" title="Enter a 6-digit hex code, such as #000000" ${hasExistingMainImage ? "" : "required"}></label>
     <label class="admin-file-field">Main image${hasExistingMainImage ? " (optional replacement)" : ""}<input data-main-file type="file" accept="image/*" ${hasExistingMainImage ? "" : "required"}></label>
     <label class="admin-file-field admin-repeater-wide">Sub images <span>(optional)</span><input data-sub-files type="file" accept="image/*" multiple></label>
     ${hasExistingMainImage ? `<img class="admin-color-image-preview" src="${escapeHtml(color.mainImage.secure_url)}" alt="Current ${escapeHtml(color.color)} product color">` : ""}
@@ -488,6 +492,9 @@ function collectColors() {
       );
       return {
         color: colorName,
+        ...(row.querySelector("[data-color-hex]").value
+          ? { hexCode: row.querySelector("[data-color-hex]").value }
+          : {}),
         ...(existingColor.mainImage
           ? { mainImage: existingColor.mainImage }
           : {}),
@@ -725,7 +732,7 @@ function setupEvents() {
         ...(productId ? { productId } : {}),
         name: document.getElementById("productName").value.trim(),
         price: Number(document.getElementById("productPrice").value),
-        ...(discountValue === "" ? {} : { discount: Number(discountValue) }),
+        discount: discountValue === "" ? 0 : Number(discountValue),
         status: document.getElementById("productStatus").value,
         category: document.getElementById("productCategory").value.trim(),
         variants,

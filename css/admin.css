@@ -344,7 +344,16 @@ body.admin-body {
 .admin-repeater-row.color-row { grid-template-columns: 1fr 1fr; }
 .admin-color-row-heading { display: flex; align-items: center; justify-content: space-between; grid-column: 1 / -1; padding-bottom: 0.55rem; border-bottom: 1px solid var(--admin-line); color: var(--admin-ink); }
 .admin-repeater-row.color-row .admin-repeater-wide { grid-column: 1 / -1; }
-.admin-repeater-row input { min-width: 0; }
+.admin-repeater-row input {
+  min-width: 0;
+  width: 100%;
+  min-height: 42px;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--admin-line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--admin-ink);
+}
 .admin-file-field { display: block; color: var(--admin-muted); font-size: 0.7rem; font-weight: 700; }
 .admin-file-field span { color: var(--admin-muted); font-weight: 400; }
 .admin-file-field input { display: block; margin-top: 0.35rem; padding: 0.55rem; font-size: 0.75rem; font-weight: 400; }
@@ -465,6 +474,7 @@ body.admin-body {
 .admin-color-row-heading { border-bottom-color: rgba(255, 255, 255, 0.14); }
 .admin-repeater-row { background: rgba(255, 255, 255, 0.03); }
 .admin-repeater-remove { border-color: rgba(255, 255, 255, 0.18); }
+.admin-repeater-row input { border-color: rgba(255, 255, 255, 0.16); background: #202020; color: #fefefe; }
 .admin-close { color: #fefefe; }
 .admin-login-page { background: radial-gradient(circle at 80% 10%, #3a3d2a 0, transparent 27%), #1f1f1f; }
 .admin-login-card { border-color: rgba(255, 255, 255, 0.1); background: rgba(41, 41, 41, 0.96); box-shadow: 0 25px 70px rgba(0, 0, 0, 0.32); }
