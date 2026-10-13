@@ -195,6 +195,7 @@
 
     <script src="../js/bootstrap.bundle.min.js"></script>
     <script src="../js/all.min.js"></script>
+    <script src="../js/api-config.js"></script>
     <script src="../js/products.js"></script>
     <script src="../js/dropi.js"></script>
     <script>
@@ -466,7 +467,7 @@
 
           try {
             const response = await fetch(
-              "http://localhost:3000/orders/checkout",
+              window.dropiApiUrl("/orders/checkout"),
               {
                 method: "POST",
                 body: order,

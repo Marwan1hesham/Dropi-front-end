@@ -1,6 +1,3 @@
-const PRODUCTS_URL = "/api/products";
-const CATEGORY_PRODUCTS_URL = "/api/products?category=";
-
 function normalizeProduct(product) {
   const discount = Number(product.discount) || 0;
   const salePrice =
@@ -33,7 +30,7 @@ function normalizeProduct(product) {
 
 async function fetchProducts() {
   try {
-    const response = await fetch(PRODUCTS_URL);
+    const response = await fetch(window.dropiApiUrl("/products/"));
     if (!response.ok) {
       throw new Error(`Failed to load products: ${response.status}`);
     }
@@ -82,7 +79,9 @@ async function getProductsByCategory(category) {
   if (!category) return [];
   try {
     const response = await fetch(
-      `${CATEGORY_PRODUCTS_URL}${encodeURIComponent(category.trim().toLowerCase())}`,
+      window.dropiApiUrl(
+        `/products/${encodeURIComponent(category.trim().toLowerCase())}`,
+      ),
     );
     if (!response.ok) {
       throw new Error(`Failed to load products: ${response.status}`);

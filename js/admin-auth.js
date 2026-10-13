@@ -1,4 +1,3 @@
-const ADMIN_API_BASE_URL = "http://localhost:3000";
 const ADMIN_TOKEN_KEY = "dropiAdminAccessToken";
 const ADMIN_COOKIE_NAME = "access_token";
 
@@ -26,7 +25,7 @@ function clearAdminToken() {
 }
 
 async function loginAdmin(username, password) {
-  const response = await fetch(`${ADMIN_API_BASE_URL}/admin/login`, {
+  const response = await fetch(window.dropiApiUrl("/admin/login"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -53,7 +52,7 @@ function adminFetch(path, options = {}) {
   const token = getAdminToken();
   const headers = new Headers(options.headers || {});
   if (token) headers.set("token", token);
-  return fetch(`${ADMIN_API_BASE_URL}${path}`, {
+  return fetch(window.dropiApiUrl(path), {
     ...options,
     headers,
   }).then((response) => {

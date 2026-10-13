@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Dropi- back"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Dropi - front"
+	}
+}
