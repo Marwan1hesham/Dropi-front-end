@@ -699,6 +699,7 @@ button,
 .contact-section{
   border-top: 1px solid var(--second-color);
   background: linear-gradient(135deg, #1f1f1f 0%, #151515 100%);
+  scroll-margin-top: 100px;
 }
 
 .contact-eyebrow {
