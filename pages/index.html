@@ -221,10 +221,42 @@
     <script src="../js/all.min.js"></script>
     <script src="../js/dropi.js"></script>
     <script>
+      let homepageContentReady = Promise.resolve();
+
+      async function scrollToContactAfterContentLoads() {
+        await homepageContentReady;
+        await document.fonts.ready;
+        const productImages = [
+          ...document.querySelectorAll(
+            "#featuredProducts img, #newArrivals img, #salesProducts img",
+          ),
+        ];
+        await Promise.allSettled(
+          productImages.map((image) => image.decode()),
+        );
+        await new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        );
+        document
+          .getElementById("contact")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
       fetch("../components/navbar.html")
         .then((response) => response.text())
         .then((data) => {
           document.getElementById("navbar").innerHTML = data;
+          const contactLink = document.querySelector(
+            '#navbar a[href*="#contact"]',
+          );
+          contactLink?.addEventListener("click", (event) => {
+            if (!document.getElementById("contact")) return;
+            event.preventDefault();
+            if (window.location.hash !== "#contact") {
+              history.pushState(null, "", "#contact");
+            }
+            scrollToContactAfterContentLoads();
+          });
         })
         .finally(() => {
           if (typeof initializeCart === "function") {
@@ -234,7 +266,10 @@
             initializeSearchOverlay();
           }
           if (typeof initProducts === "function") {
-            initProducts();
+            homepageContentReady = initProducts();
+          }
+          if (window.location.hash === "#contact") {
+            scrollToContactAfterContentLoads();
           }
         });
     </script>
