@@ -89,6 +89,23 @@ function updateProductActions(product, selectedColor, selectedSize) {
       : "";
 }
 
+function updateProductOptionAvailability(product, selectedColor) {
+  document.querySelectorAll(".color-swatch").forEach((button) => {
+    const color = button.dataset.color || "";
+    const soldOut = getAvailableProductStock(product, color, null) < 1;
+    button.disabled = soldOut;
+    button.title = soldOut ? "Sold out" : color;
+    button.setAttribute("aria-label", soldOut ? `${color}, sold out` : color);
+  });
+
+  document.querySelectorAll(".size-swatch").forEach((button) => {
+    const size = button.dataset.size || "";
+    const soldOut = getAvailableProductStock(product, selectedColor, size) < 1;
+    button.disabled = soldOut;
+    button.title = soldOut ? "Sold out for this color" : "";
+  });
+}
+
 function getProductImageData(product, selectedColor) {
   const colors = Array.isArray(product.colorOptions)
     ? product.colorOptions
@@ -178,6 +195,7 @@ function renderProductDetail(product) {
     ? product.colorOptions
     : [];
   const productImage = document.getElementById("productImage");
+  updateProductOptionAvailability(product, selectedColor);
   updateProductActions(product, selectedColor, selectedSize);
 
   document.querySelectorAll(".color-swatch").forEach((btn) => {
@@ -189,6 +207,15 @@ function renderProductDetail(product) {
       btn.classList.add("selected");
       btn.setAttribute("aria-pressed", "true");
       selectedColor = btn.dataset.color || null;
+      if (
+        selectedSize &&
+        getAvailableProductStock(product, selectedColor, selectedSize) < 1
+      ) {
+        selectedSize = null;
+        document
+          .querySelectorAll(".size-swatch")
+          .forEach((sizeButton) => sizeButton.classList.remove("selected"));
+      }
       document.getElementById("selectedColorName").textContent =
         `Selected: ${selectedColor}`;
 
@@ -198,6 +225,7 @@ function renderProductDetail(product) {
         productImage.src = selectedImage;
         productImage.alt = `${product.name} - ${selectedColor}`;
       }
+      updateProductOptionAvailability(product, selectedColor);
       updateProductActions(product, selectedColor, selectedSize);
     });
   });

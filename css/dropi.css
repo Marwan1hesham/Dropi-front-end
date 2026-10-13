@@ -1005,6 +1005,14 @@ button,
   cursor: pointer;
   transition: transform 0.08s ease, outline 0.08s ease, box-shadow 0.08s ease;
 }
+.color-swatch:disabled,
+.size-swatch:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+  filter: grayscale(1);
+}
+.color-swatch:disabled { border-style: dashed; }
+.size-swatch:disabled { text-decoration: line-through; }
 .color-swatch.selected {
   border-color: #fff;
   outline: none;
